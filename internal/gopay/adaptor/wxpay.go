@@ -18,13 +18,18 @@ var _ gopay.GoPay = &WxPay{}
 
 // UnifiedOrder 统一下单接口
 func (p *WxPay) UnifiedOrder(req *gopay.UnifiedOrderRequest) (resp *gopay.UnifiedOrderResponse, err error) {
-	param := &wxpay.UnifiedOrderRequest{}
+	param := &wxpay.UnifiedOrderRequest{
+		Body:       req.Subject,
+		OutTradeNo: req.OutTradeNo,
+		TotalFee:   req.TotalFee,
+	}
 
 	if req.OpenId != "" {
-		param["open_id"] = req.OpenId
+		param.OpenId = req.OpenId
 	}
+
 	if req.ClientIp != "" {
-		param["spbill_create_ip"] = req.ClientIp
+		param.SpbillCreateIp = req.ClientIp
 	}
 
 	app := wxpay.NewApp(p.TradeType, p.AppId, p.AppSecret, p.MchId, p.NotifyUrl)
@@ -58,5 +63,29 @@ func (p *WxPay) Notify(data []byte) (resp *gopay.NotifyResponse, err error) {
 
 // Refund 退款接口
 func (p *WxPay) Refund(req *gopay.RefundRequest) (resp *gopay.RefundResponse, err error) {
+	param := &wxpay.RefundRequest{
+		TransactionId: req.TransactionId,
+		OutTradeNo:    req.OutTradeNo,
+		OutRefundNo:   req.OutRefundNo,
+		TotalFee:      req.TotalFee,
+		RefundFee:     req.RefundFee,
+		NotifyUrl:     req.NotifyUrl,
+	}
+
+	app := wxpay.NewApp(p.TradeType, p.AppId, p.AppSecret, p.MchId, p.NotifyUrl)
+	result, err := app.Refund(param)
+	if err != nil {
+		return
+	}
+
+	resp = &gopay.RefundResponse{
+		TransactionId: result.TransactionId,
+		OutTradeNo:    result.OutTradeNo,
+		OutRefundNo:   result.OutRefundNo,
+		TotalFee:      result.TotalFee,
+		RefundId:      result.RefundId,
+		RefundFee:     result.RefundFee,
+		CashFee:       result.CashFee,
+	}
 	return
 }
