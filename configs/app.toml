@@ -1,0 +1,22 @@
+
+[wxpay]
+[wxpay.app]
+mchid = ""
+app_id = ""
+app_secret = ""
+trade_type = "APP"
+notify_url = ""
+
+[wxpay.jsapi]
+mchid = ""
+app_id = ""
+app_secret = ""
+trade_type = "JSAPI"
+notify_url = ""
+
+[wxpay.native]
+mchid = ""
+app_id = ""
+app_secret = ""
+trade_type = "NATIVE"
+notify_url = ""

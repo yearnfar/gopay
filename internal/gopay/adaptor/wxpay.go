@@ -5,8 +5,8 @@ import (
 	"github.com/yearnfar/gopay/internal/pkg/wxpay"
 )
 
-// WxPay 微信支付
-type WxPay struct {
+// Wxpay 微信支付
+type Wxpay struct {
 	AppId     string // 公众账号ID
 	AppSecret string // AppSecret是APPID对应的接口密码
 	MchId     string // 商户号
@@ -14,10 +14,10 @@ type WxPay struct {
 	TradeType string // 交易类型
 }
 
-var _ gopay.GoPay = &WxPay{}
+var _ gopay.GoPay = &Wxpay{}
 
 // UnifiedOrder 统一下单接口
-func (p *WxPay) UnifiedOrder(req *gopay.UnifiedOrderRequest) (resp *gopay.UnifiedOrderResponse, err error) {
+func (p *Wxpay) UnifiedOrder(req *gopay.UnifiedOrderRequest) (resp *gopay.UnifiedOrderResponse, err error) {
 	param := &wxpay.UnifiedOrderRequest{
 		Body:       req.Subject,
 		OutTradeNo: req.OutTradeNo,
@@ -47,7 +47,7 @@ func (p *WxPay) UnifiedOrder(req *gopay.UnifiedOrderRequest) (resp *gopay.Unifie
 }
 
 // Notify 支付回调
-func (p *WxPay) Notify(data []byte) (resp *gopay.NotifyResponse, err error) {
+func (p *Wxpay) Notify(data []byte) (resp *gopay.NotifyResponse, err error) {
 	app := wxpay.NewApp(p.TradeType, p.AppId, p.AppSecret, p.MchId, p.NotifyUrl)
 	result, err := app.Notify(data)
 	if err != nil {
@@ -62,7 +62,7 @@ func (p *WxPay) Notify(data []byte) (resp *gopay.NotifyResponse, err error) {
 }
 
 // Refund 退款接口
-func (p *WxPay) Refund(req *gopay.RefundRequest) (resp *gopay.RefundResponse, err error) {
+func (p *Wxpay) Refund(req *gopay.RefundRequest) (resp *gopay.RefundResponse, err error) {
 	param := &wxpay.RefundRequest{
 		TransactionId: req.TransactionId,
 		OutTradeNo:    req.OutTradeNo,
